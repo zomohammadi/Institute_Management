@@ -1,3 +1,4 @@
+/*
 package org.example.institutemanagement.entity;
 
 import jakarta.persistence.Entity;
@@ -20,3 +21,4 @@ public class Department extends BaseEntity {
 
     private String name;
 }
+*/

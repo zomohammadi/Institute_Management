@@ -34,6 +34,6 @@ public class Course extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     private Lesson lesson;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Department department;
+  /*  @ManyToOne(fetch = FetchType.LAZY)
+    private Department department;*/
 }

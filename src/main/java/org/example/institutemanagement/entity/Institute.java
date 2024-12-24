@@ -1,3 +1,4 @@
+/*
 package org.example.institutemanagement.entity;
 
 
@@ -19,3 +20,4 @@ public class Institute extends BaseEntity{
 
     private String name;
 }
+*/
