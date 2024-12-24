@@ -23,6 +23,7 @@ public class Course extends BaseEntity{
 
     private Integer endHour;
 
+    @Enumerated(EnumType.STRING)
     private Day day;
 
     @ManyToOne(fetch = FetchType.LAZY)
