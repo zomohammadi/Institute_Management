@@ -43,10 +43,16 @@ public class StudentServiceImpl implements StudentService {
         userRepository.save(user);
         studentRepository.save(student);
 
-        return ResponsePersonDto.builder()
-                .code(code)
-                .password(user.getPassword())
-                .firstName(person.getFirstName())
+        return createResponsePersonDto(code, user, person);
+    }
+
+    @Override
+    public Student findById(Long studentId){
+        return studentRepository.findById(studentId).orElseThrow(() -> new FoundException("Student not found"));
+    }
+
+    private static ResponsePersonDto createResponsePersonDto(String code, User user, Person person) {
+        return ResponsePersonDto.builder().code(code).password(user.getPassword()).firstName(person.getFirstName())
                 .lastName(person.getLastName())
                 .email(person.getEmailAddress())
                 .username(user.getUsername())

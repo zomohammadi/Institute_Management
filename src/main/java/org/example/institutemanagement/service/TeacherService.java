@@ -6,6 +6,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface TeacherService {
 
-    @Transactional
     ResponsePersonDto save(RegisterTeacherDto dto);
 }

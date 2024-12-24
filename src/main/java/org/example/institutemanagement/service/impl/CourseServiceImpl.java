@@ -40,6 +40,8 @@ public class CourseServiceImpl implements CourseService {
         if (!lessonRepository.existsById(dto.lessonId()))
             throw new NotFoundException("Lesson not found");
 
+        // corse e ke add mishe nabayad confilict zamani dashte bashe
+
         Course course = Course.builder().capacity(dto.capacity()).startHour(dto.startHour())
                 .endHour(dto.endHour())
                 .day(Day.valueOf(dto.day()))
@@ -49,5 +51,11 @@ public class CourseServiceImpl implements CourseService {
                 .build();
 
         courseRepository.save(course);
+    }
+
+
+    @Override
+    public Course findById(Long courseId) {
+        return courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException("Course not found"));
     }
 }

@@ -5,6 +5,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface TermService {
 
-    @Transactional
     void save(RegisterTermDto term);
 }
