@@ -2,8 +2,8 @@ package org.example.institutemanagement.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.institutemanagement.dto.RegisterLessonDto;
-import org.example.institutemanagement.service.LessonService;
+import org.example.institutemanagement.dto.RegisterTermDto;
+import org.example.institutemanagement.service.TermService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/lessons")
+@RequestMapping("/v1/terms")
 @RequiredArgsConstructor
-public class LessonController {
+public class TermController {
 
-    private final LessonService lessonService;
+    private final TermService termService;
 
-    @PostMapping("/LessonRegister")
-    public ResponseEntity<Void> lessonRegister(@RequestBody @Valid RegisterLessonDto dto) {
+    @PostMapping("/TermRegister")
+    public ResponseEntity<Void> termRegister(@RequestBody @Valid RegisterTermDto dto) {
 
-        lessonService.save(dto);
-        return new ResponseEntity<>( HttpStatus.CREATED);
+        termService.save(dto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 }
