@@ -1,5 +1,6 @@
 package org.example.institutemanagement.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,9 +21,12 @@ public class Person extends BaseEntity{
 
     private String lastName;
 
+    @Column(unique=true, nullable=false)
     private String nationalCode;
 
+    @Column( nullable=false)
     private String mobileNumber;
 
+    @Column( nullable=false)
     private String emailAddress;
 }
