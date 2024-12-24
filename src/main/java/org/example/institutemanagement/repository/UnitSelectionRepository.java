@@ -1,6 +1,5 @@
 package org.example.institutemanagement.repository;
 
-import org.example.institutemanagement.entity.Course;
 import org.example.institutemanagement.entity.Student;
 import org.example.institutemanagement.entity.Term;
 import org.example.institutemanagement.entity.UnitSelection;
