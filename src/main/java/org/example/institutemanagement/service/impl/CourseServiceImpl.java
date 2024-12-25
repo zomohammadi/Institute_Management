@@ -44,7 +44,8 @@ public class CourseServiceImpl implements CourseService {
         if (!lessonRepository.existsById(dto.lessonId()))
             throw new NotFoundException("Lesson not found");
 
-        // corse e ke add mishe nabayad confilict zamani dashte bashe
+        checkCourseTimeConflict(dto.startHour(), dto.endHour(), dto.day(), dto.termId(), dto.teacherId());
+
 
         Course course = Course.builder().capacity(dto.capacity()).startHour(dto.startHour())
                 .endHour(dto.endHour())
@@ -57,7 +58,14 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.save(course);
     }
 
+    private void checkCourseTimeConflict(Integer startHour, Integer endHour, String day, Long termId, Long teacherId) {
+        Day dayEnum = Day.valueOf(day);
+        List<Course> conflictingCourses = courseRepository.findConflictingCourses(startHour, endHour, dayEnum, termId, teacherId);
 
+        if (!conflictingCourses.isEmpty()) {
+            throw new RuntimeException("Time conflict detected with existing courses");
+        }
+    }
     @Override
     public Course findById(Long courseId) {
         return courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException("Course not found"));
