@@ -2,14 +2,14 @@ package org.example.institutemanagement.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.institutemanagement.dto.ResponseStudentDto;
 import org.example.institutemanagement.dto.SelectUnitDto;
 import org.example.institutemanagement.service.UnitSelectionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/unistSelections")
@@ -27,5 +27,12 @@ public class UnitSelectionController {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
+    }
+
+    @GetMapping("/findStudentsWithScore/{courseId}")
+    public ResponseEntity<List<ResponseStudentDto>> findStudentsWithScore(@PathVariable("courseId")
+                                                                          Long courseId) {
+
+        return new ResponseEntity<>(unitSelectionService.findStudentsWithScore(courseId), HttpStatus.OK);
     }
 }

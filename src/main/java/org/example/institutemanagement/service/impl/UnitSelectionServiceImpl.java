@@ -1,6 +1,8 @@
 package org.example.institutemanagement.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.institutemanagement.dto.ResponseStudentDto;
+import org.example.institutemanagement.dto.projection.UnitSelectionProjection;
 import org.example.institutemanagement.entity.UnitSelection;
 import org.example.institutemanagement.repository.CourseRepository;
 import org.example.institutemanagement.service.UnitSelectionService;
@@ -12,6 +14,8 @@ import org.example.institutemanagement.service.CourseService;
 import org.example.institutemanagement.service.StudentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,5 +47,22 @@ public class UnitSelectionServiceImpl implements UnitSelectionService {
         unitSelectionRepository.save(UnitSelection.builder()
                 .student(student).course(course).build());
 
+    }
+
+    @Override
+    public UnitSelection findById(Long unitSelectionId){
+        return unitSelectionRepository.findById(unitSelectionId).orElseThrow(
+                () -> new FoundException("unit selection not found")
+        );
+    }
+
+    @Override
+    public List<ResponseStudentDto> findStudentsWithScore(Long courseId){
+        List<UnitSelectionProjection> proj = unitSelectionRepository.findStudentsWithScore(courseId);
+
+        return proj.stream().map(p->ResponseStudentDto.builder()
+                .score(p.getScore()).id(p.getId()).code(p.getCode()).lastName(p.getLastName())
+                .firstName(p.getFirstName())
+                .build()).toList();
     }
 }
