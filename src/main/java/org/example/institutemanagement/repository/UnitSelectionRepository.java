@@ -1,11 +1,14 @@
 package org.example.institutemanagement.repository;
 
+import org.example.institutemanagement.entity.Course;
 import org.example.institutemanagement.entity.Student;
 import org.example.institutemanagement.entity.Term;
 import org.example.institutemanagement.entity.UnitSelection;
 import org.example.institutemanagement.enumaration.Day;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.Optional;
 
 public interface UnitSelectionRepository extends JpaRepository<UnitSelection, Long> {
 
@@ -23,4 +26,6 @@ public interface UnitSelectionRepository extends JpaRepository<UnitSelection, Lo
                                      Integer courseEndHour,
                                      Term courseTerm,
                                      Day courseDay, Student student);
+
+    Optional<UnitSelection> findByStudentAndCourse(Student student, Course course);
 }
