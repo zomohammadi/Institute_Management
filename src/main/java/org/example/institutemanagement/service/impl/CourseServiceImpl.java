@@ -2,6 +2,8 @@ package org.example.institutemanagement.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.institutemanagement.dto.RegisterCourseDto;
+import org.example.institutemanagement.dto.ResponseCourseDto;
+import org.example.institutemanagement.dto.projection.ResponseCourseProjection;
 import org.example.institutemanagement.entity.Course;
 import org.example.institutemanagement.entity.Lesson;
 import org.example.institutemanagement.entity.Teacher;
@@ -15,6 +17,8 @@ import org.example.institutemanagement.repository.TermRepository;
 import org.example.institutemanagement.service.CourseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -57,5 +61,18 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course findById(Long courseId) {
         return courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException("Course not found"));
+    }
+
+    @Override
+    public List<ResponseCourseDto> findCourses(Long teacherId, Long termID) {
+
+         List<ResponseCourseProjection> proj = courseRepository.findCourses(teacherId, termID);
+
+        return proj.stream().map(proj1 -> ResponseCourseDto.builder()
+                .courseId(proj1.getCourseId()).lessonName(proj1.getLessonName())
+                .day(proj1.getDay()).startHour(proj1.getStartHour())
+                .endHour(proj1.getEndHour()).build()).toList();
+
+
     }
 }
