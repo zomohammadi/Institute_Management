@@ -2,6 +2,7 @@ package org.example.institutemanagement.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Builder;
+import org.example.institutemanagement.anotation.ValidDay;
 
 @Builder
 public record RegisterCourseDto(
@@ -21,8 +22,7 @@ public record RegisterCourseDto(
         @Max(value = 20, message = "endHour must be at most {value}")
         Integer endHour,
 
-        @NotBlank(message = "day cannot be Blank")
-        @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "day can only contain letters")
+        @ValidDay
         String day,
 
         @NotNull(message = "teacherId cannot be null")
