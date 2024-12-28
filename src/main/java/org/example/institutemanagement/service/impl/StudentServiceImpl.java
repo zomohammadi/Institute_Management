@@ -7,7 +7,7 @@ import org.example.institutemanagement.entity.Person;
 import org.example.institutemanagement.entity.Student;
 import org.example.institutemanagement.entity.User;
 import org.example.institutemanagement.exception.FoundException;
-import org.example.institutemanagement.mapper.Mapper;
+import org.example.institutemanagement.mapper.PersonMapper;
 import org.example.institutemanagement.repository.StudentRepository;
 import org.example.institutemanagement.service.PersonService;
 import org.example.institutemanagement.service.StudentService;
@@ -49,7 +49,7 @@ public class StudentServiceImpl implements StudentService {
         userService.save(user);
         studentRepository.save(student);
 
-        return Mapper.createResponsePersonDto(code, user, person);
+        return PersonMapper.createResponsePersonDto(code, user, person);
     }
 
     @Override

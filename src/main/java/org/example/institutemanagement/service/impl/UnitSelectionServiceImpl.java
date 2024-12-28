@@ -3,16 +3,16 @@ package org.example.institutemanagement.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.institutemanagement.dto.ResponseStudentDto;
 import org.example.institutemanagement.dto.projection.UnitSelectionProjection;
-import org.example.institutemanagement.entity.UnitSelection;
-import org.example.institutemanagement.mapper.Mapper;
-import org.example.institutemanagement.repository.CourseRepository;
-import org.example.institutemanagement.service.UnitSelectionService;
 import org.example.institutemanagement.entity.Course;
 import org.example.institutemanagement.entity.Student;
+import org.example.institutemanagement.entity.UnitSelection;
 import org.example.institutemanagement.exception.FoundException;
+import org.example.institutemanagement.mapper.StudentMapper;
+import org.example.institutemanagement.repository.CourseRepository;
 import org.example.institutemanagement.repository.UnitSelectionRepository;
 import org.example.institutemanagement.service.CourseService;
 import org.example.institutemanagement.service.StudentService;
+import org.example.institutemanagement.service.UnitSelectionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +63,7 @@ public class UnitSelectionServiceImpl implements UnitSelectionService {
 
         List<UnitSelectionProjection> proj = unitSelectionRepository.findStudentsWithScore(courseId);
 
-        return Mapper.convertUnitSelectionProjectionToResponseStudentDtoList(proj);
+        return StudentMapper.convertUnitSelectionProjectionToDto(proj);
 
     }
 }

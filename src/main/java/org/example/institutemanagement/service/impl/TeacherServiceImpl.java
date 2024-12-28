@@ -7,7 +7,7 @@ import org.example.institutemanagement.entity.Person;
 import org.example.institutemanagement.entity.Teacher;
 import org.example.institutemanagement.entity.User;
 import org.example.institutemanagement.exception.FoundException;
-import org.example.institutemanagement.mapper.Mapper;
+import org.example.institutemanagement.mapper.PersonMapper;
 import org.example.institutemanagement.repository.TeacherRepository;
 import org.example.institutemanagement.service.PersonService;
 import org.example.institutemanagement.service.TeacherService;
@@ -50,7 +50,7 @@ public class TeacherServiceImpl implements TeacherService {
         userService.save(user);
         teacherRepository.save(teacher);
 
-        return Mapper.createResponsePersonDto(code, person, user);
+        return PersonMapper.createResponsePersonDto(code, person, user);
     }
 
 

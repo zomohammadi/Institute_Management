@@ -6,7 +6,7 @@ import org.example.institutemanagement.dto.ResponseCourseDto;
 import org.example.institutemanagement.dto.projection.ResponseCourseProjection;
 import org.example.institutemanagement.entity.Course;
 import org.example.institutemanagement.exception.NotFoundException;
-import org.example.institutemanagement.mapper.Mapper;
+import org.example.institutemanagement.mapper.CourseMapper;
 import org.example.institutemanagement.repository.CourseRepository;
 import org.example.institutemanagement.service.CourseService;
 import org.example.institutemanagement.validation.CourseValidator;
@@ -29,8 +29,7 @@ public class CourseServiceImpl implements CourseService {
     public void save(RegisterCourseDto dto) {
 
         courseValidator.validateCourseData(dto);
-        Course course = Mapper.convertDtoToCourse(dto);
-
+        Course course = CourseMapper.convertDtoToCourse(dto);
         courseRepository.save(course);
     }
 
@@ -45,7 +44,7 @@ public class CourseServiceImpl implements CourseService {
 
         List<ResponseCourseProjection> proj = courseRepository.findCourses(teacherId, termID);
 
-        return Mapper.convertCourseProjectionListToResponseCourseDto(proj);
+        return CourseMapper.convertCourseProjectionListToDtoList(proj);
 
 
     }
