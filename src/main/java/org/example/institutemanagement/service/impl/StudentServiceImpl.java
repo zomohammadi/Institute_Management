@@ -8,6 +8,7 @@ import org.example.institutemanagement.entity.Student;
 import org.example.institutemanagement.entity.User;
 import org.example.institutemanagement.exception.FoundException;
 import org.example.institutemanagement.mapper.PersonMapper;
+import org.example.institutemanagement.mapper.StudentMapper;
 import org.example.institutemanagement.repository.StudentRepository;
 import org.example.institutemanagement.service.PersonService;
 import org.example.institutemanagement.service.StudentService;
@@ -40,11 +41,9 @@ public class StudentServiceImpl implements StudentService {
         String code = studentCodeGenerator.generateCode(Integer.valueOf(dto.enteringYear()));
 
         User user = userService.createUser(person, dto.username());
-        Student student = Student.builder()
-                .code(code)
-                .enteringYear(Integer.valueOf(dto.enteringYear()))
-                .person(person)
-                .build();
+
+        Student student = StudentMapper.createStudent(code,dto.enteringYear(),person);
+
 
         userService.save(user);
         studentRepository.save(student);
