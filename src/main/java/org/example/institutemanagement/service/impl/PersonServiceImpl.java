@@ -1,7 +1,7 @@
 package org.example.institutemanagement.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.institutemanagement.dto.RegisterTeacherDto;
+import org.example.institutemanagement.dto.PersonDto;
 import org.example.institutemanagement.entity.Person;
 import org.example.institutemanagement.repository.PersonRepository;
 import org.example.institutemanagement.service.PersonService;
@@ -16,7 +16,7 @@ public class PersonServiceImpl implements PersonService {
     private final PersonRepository personRepository;
 
     @Override
-    public Person findOrCreatePerson(RegisterTeacherDto dto) {
+    public <T extends PersonDto> Person findOrCreatePerson(T dto) {
         return personRepository.findByNationalCode(dto.nationalCode())
                 .orElseGet(() -> {
                     Person newPerson = Person.builder()
@@ -29,4 +29,5 @@ public class PersonServiceImpl implements PersonService {
                     return personRepository.save(newPerson);
                 });
     }
+
 }

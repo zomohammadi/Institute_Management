@@ -7,11 +7,11 @@ import org.example.institutemanagement.entity.Person;
 import org.example.institutemanagement.entity.Student;
 import org.example.institutemanagement.entity.User;
 import org.example.institutemanagement.exception.FoundException;
-import org.example.institutemanagement.repository.PersonRepository;
+import org.example.institutemanagement.mapper.Mapper;
 import org.example.institutemanagement.repository.StudentRepository;
-import org.example.institutemanagement.repository.UserRepository;
+import org.example.institutemanagement.service.PersonService;
 import org.example.institutemanagement.service.StudentService;
-import org.example.institutemanagement.util.GenerateCode;
+import org.example.institutemanagement.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,77 +21,40 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
-    private final PersonRepository personRepository;
-    private final UserRepository userRepository;
+    private final StudentCodeGenerator studentCodeGenerator;
+    private final PersonService personService;
+    private final UserService userService;
 
     @Override
     @Transactional
     public ResponsePersonDto save(RegisterStudentDto dto) {
 
-        Person person = findOrCreatePerson(dto);
+        Person person = personService.findOrCreatePerson(dto);
 
         if (studentRepository.existsByPersonId(person.getId())) {
             throw new FoundException("Student with NationalCode already exists");
         }
-        if (userRepository.existsByUsername(dto.username()))
+        if (userService.existsByUsername(dto.username()))
             throw new FoundException("Username already exists");
 
-        String code = generateStudentCode(Integer.valueOf(dto.enteringYear()));
-        User user = createUser(person, dto.username());
-        Student student = createStudent(person, Integer.valueOf(dto.enteringYear()), code);
+        String code = studentCodeGenerator.generateCode(Integer.valueOf(dto.enteringYear()));
 
-        userRepository.save(user);
+        User user = userService.createUser(person, dto.username());
+        Student student = Student.builder()
+                .code(code)
+                .enteringYear(Integer.valueOf(dto.enteringYear()))
+                .person(person)
+                .build();
+
+        userService.save(user);
         studentRepository.save(student);
 
-        return createResponsePersonDto(code, user, person);
+        return Mapper.createResponsePersonDto(code, user, person);
     }
 
     @Override
-    public Student findById(Long studentId){
+    public Student findById(Long studentId) {
         return studentRepository.findById(studentId).orElseThrow(() -> new FoundException("Student not found"));
-    }
-
-    private static ResponsePersonDto createResponsePersonDto(String code, User user, Person person) {
-        return ResponsePersonDto.builder().code(code).password(user.getPassword()).firstName(person.getFirstName())
-                .lastName(person.getLastName())
-                .email(person.getEmailAddress())
-                .username(user.getUsername())
-                .build();
-    }
-
-
-    private Person findOrCreatePerson(RegisterStudentDto dto) {
-        return personRepository.findByNationalCode(dto.nationalCode())
-                .orElseGet(() -> {
-                    Person newPerson = Person.builder()
-                            .firstName(dto.firstName())
-                            .lastName(dto.lastName())
-                            .mobileNumber(dto.mobileNumber())
-                            .nationalCode(dto.nationalCode())
-                            .emailAddress(dto.emailAddress())
-                            .build();
-                    return personRepository.save(newPerson);
-                });
-    }
-
-    private String generateStudentCode(Integer enteringYear) {
-        return enteringYear.toString().concat(GenerateCode.generateCode());
-    }
-
-    private User createUser(Person person, String username) {
-        return User.builder()
-                .person(person)
-                .username(username)
-                .password(GenerateCode.generateSecurePassword())
-                .build();
-    }
-
-    private Student createStudent(Person person, Integer enteringYear, String code) {
-        return Student.builder()
-                .code(code)
-                .enteringYear(enteringYear)
-                .person(person)
-                .build();
     }
 
 

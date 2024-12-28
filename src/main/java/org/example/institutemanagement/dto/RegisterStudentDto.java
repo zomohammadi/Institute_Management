@@ -40,5 +40,5 @@ public record RegisterStudentDto(
         String username
 
 
-) {
+) implements PersonDto{
 }

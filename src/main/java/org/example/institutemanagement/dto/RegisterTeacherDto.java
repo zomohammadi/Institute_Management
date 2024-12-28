@@ -38,6 +38,6 @@ public record RegisterTeacherDto(
         @NotNull(message = "salary cannot be null")
         Double salary
 
-) {
+) implements PersonDto{
 
 }
