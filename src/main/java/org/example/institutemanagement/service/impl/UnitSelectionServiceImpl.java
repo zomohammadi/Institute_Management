@@ -2,6 +2,7 @@ package org.example.institutemanagement.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.institutemanagement.dto.ResponseStudentDto;
+import org.example.institutemanagement.dto.projection.CourseProjection;
 import org.example.institutemanagement.dto.projection.UnitSelectionProjection;
 import org.example.institutemanagement.entity.Course;
 import org.example.institutemanagement.entity.Student;
@@ -38,10 +39,15 @@ public class UnitSelectionServiceImpl implements UnitSelectionService {
         if (course.getCapacity() <= 0)
             throw new RuntimeException("Capacity is zero");
 
-        if (unitSelectionRepository.isSelectCourseInThisTime(
-                course.getStartHour(),course.getEndHour(),
-                course.getTerm(),course.getDay(), student))
-            throw new FoundException("conflict in selected unit");
+        List<CourseProjection> Courses = unitSelectionRepository.findAllCoursesStudentGetInThisTerm(
+                course.getTerm(), student);
+
+        for (CourseProjection courseProjection : Courses) {
+            if (courseProjection.getDay().equalsIgnoreCase(course.getDay().name()))
+                if (courseProjection.getStartHour() < course.getEndHour()
+                        && courseProjection.getEndHour() > course.getStartHour())
+                    throw new FoundException("conflict in selected unit with this Lesson:" + courseProjection.getTitle());
+        }
 
         course.setCapacity(course.getCapacity() - 1);
 
@@ -53,19 +59,19 @@ public class UnitSelectionServiceImpl implements UnitSelectionService {
 
     @Override
     @Transactional
-    public void save(UnitSelection unitSelection){
+    public void save(UnitSelection unitSelection) {
         unitSelectionRepository.save(unitSelection);
     }
 
     @Override
-    public UnitSelection findById(Long unitSelectionId){
+    public UnitSelection findById(Long unitSelectionId) {
         return unitSelectionRepository.findById(unitSelectionId).orElseThrow(
                 () -> new FoundException("unit selection not found")
         );
     }
 
     @Override
-    public List<ResponseStudentDto> findStudentsWithScore(Long courseId){
+    public List<ResponseStudentDto> findStudentsWithScore(Long courseId) {
 
         List<UnitSelectionProjection> proj = unitSelectionRepository.findStudentsWithScore(courseId);
 
@@ -73,3 +79,7 @@ public class UnitSelectionServiceImpl implements UnitSelectionService {
 
     }
 }
+ /* if (unitSelectionRepository.isSelectCourseInThisTime(
+                course.getStartHour(),course.getEndHour(),
+                course.getTerm(),course.getDay(), student))
+            throw new FoundException("conflict in selected unit");*/

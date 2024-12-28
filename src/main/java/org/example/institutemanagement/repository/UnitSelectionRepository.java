@@ -1,10 +1,10 @@
 package org.example.institutemanagement.repository;
 
+import org.example.institutemanagement.dto.projection.CourseProjection;
 import org.example.institutemanagement.dto.projection.UnitSelectionProjection;
 import org.example.institutemanagement.entity.Student;
 import org.example.institutemanagement.entity.Term;
 import org.example.institutemanagement.entity.UnitSelection;
-import org.example.institutemanagement.enumaration.Day;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,20 +12,15 @@ import java.util.List;
 
 public interface UnitSelectionRepository extends JpaRepository<UnitSelection, Long> {
 
+
     @Query("""
-            Select count(u)>0 from UnitSelection u
-            inner join u.student s
-            inner join u.course c
-            where u.student = :student
-            and c.startHour < :courseEndHour and
-            c.endHour > :courseStartHour
-            and c.term = :courseTerm
-            and c.day = :courseDay
+            select c.id as id,
+            c.day as day,c.startHour as startHour,c.endHour as endHour,c.lesson.title as title
+             from Course c join UnitSelection u
+             on u.course = c
+            where c.term = :term and u.student = :student
             """)
-    boolean isSelectCourseInThisTime(Integer courseStartHour,
-                                     Integer courseEndHour,
-                                     Term courseTerm,
-                                     Day courseDay, Student student);
+    List<CourseProjection> findAllCoursesStudentGetInThisTerm(Term term, Student student);
 
 
     @Query(
@@ -39,3 +34,18 @@ public interface UnitSelectionRepository extends JpaRepository<UnitSelection, Lo
     List<UnitSelectionProjection> findStudentsWithScore(Long courseId);
 }
 //    Optional<UnitSelection> findByStudentAndCourse(Student student, Course course);
+
+  /*  @Query("""
+            Select count(u)>0 from UnitSelection u
+            inner join u.student s
+            inner join u.course c
+            where u.student = :student
+            and c.startHour < :courseEndHour and
+            c.endHour > :courseStartHour
+            and c.term = :courseTerm
+            and c.day = :courseDay
+            """)
+    boolean isSelectCourseInThisTime(Integer courseStartHour,
+                                     Integer courseEndHour,
+                                     Term courseTerm,
+                                     Day courseDay, Student student);*/
