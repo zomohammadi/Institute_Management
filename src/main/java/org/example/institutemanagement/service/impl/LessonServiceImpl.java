@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.institutemanagement.dto.RegisterLessonDto;
 import org.example.institutemanagement.entity.Lesson;
 import org.example.institutemanagement.exception.FoundException;
+import org.example.institutemanagement.mapper.LessonMapper;
 import org.example.institutemanagement.repository.LessonRepository;
 import org.example.institutemanagement.service.LessonService;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,7 @@ public class LessonServiceImpl implements LessonService {
         if (lessonRepository.existsByTitle(dto.title()))
             throw new FoundException("this title already exists");
 
-        Lesson lesson = Lesson.builder().title(dto.title()).unit(Integer.valueOf(dto.unit()))
-                .build();
+        Lesson lesson = LessonMapper.createLesson(dto);
 
         lessonRepository.save(lesson);
     }
