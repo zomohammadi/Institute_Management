@@ -8,6 +8,7 @@ import org.example.institutemanagement.entity.Teacher;
 import org.example.institutemanagement.entity.User;
 import org.example.institutemanagement.exception.FoundException;
 import org.example.institutemanagement.mapper.PersonMapper;
+import org.example.institutemanagement.mapper.TeacherMapper;
 import org.example.institutemanagement.repository.TeacherRepository;
 import org.example.institutemanagement.service.PersonService;
 import org.example.institutemanagement.service.TeacherService;
@@ -41,11 +42,8 @@ public class TeacherServiceImpl implements TeacherService {
         String code = teacherCodeGenerator.generateCode();
 
         User user = userService.createUser(person, dto.username());
-        Teacher teacher = Teacher.builder()
-                .code(code)
-                .salary(dto.salary())
-                .person(person)
-                .build();
+
+        Teacher teacher = TeacherMapper.createTeacher(code,dto.salary(),person);
 
         userService.save(user);
         teacherRepository.save(teacher);
