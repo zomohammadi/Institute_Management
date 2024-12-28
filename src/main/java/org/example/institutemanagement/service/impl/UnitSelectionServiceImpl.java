@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.institutemanagement.dto.ResponseStudentDto;
 import org.example.institutemanagement.dto.projection.UnitSelectionProjection;
 import org.example.institutemanagement.entity.UnitSelection;
+import org.example.institutemanagement.mapper.Mapper;
 import org.example.institutemanagement.repository.CourseRepository;
 import org.example.institutemanagement.service.UnitSelectionService;
 import org.example.institutemanagement.entity.Course;
@@ -43,6 +44,7 @@ public class UnitSelectionServiceImpl implements UnitSelectionService {
             throw new FoundException("conflict in selected unit");
 
         course.setCapacity(course.getCapacity() - 1);
+
         courseRepository.save(course);
         unitSelectionRepository.save(UnitSelection.builder()
                 .student(student).course(course).build());
@@ -58,11 +60,10 @@ public class UnitSelectionServiceImpl implements UnitSelectionService {
 
     @Override
     public List<ResponseStudentDto> findStudentsWithScore(Long courseId){
+
         List<UnitSelectionProjection> proj = unitSelectionRepository.findStudentsWithScore(courseId);
 
-        return proj.stream().map(p->ResponseStudentDto.builder()
-                .score(p.getScore()).id(p.getId()).code(p.getCode()).lastName(p.getLastName())
-                .firstName(p.getFirstName())
-                .build()).toList();
+        return Mapper.convertUnitSelectionProjectionToResponseStudentDtoList(proj);
+
     }
 }
