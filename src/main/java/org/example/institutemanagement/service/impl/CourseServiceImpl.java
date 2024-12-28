@@ -10,6 +10,7 @@ import org.example.institutemanagement.entity.Teacher;
 import org.example.institutemanagement.entity.Term;
 import org.example.institutemanagement.enumaration.Day;
 import org.example.institutemanagement.exception.NotFoundException;
+import org.example.institutemanagement.mapper.Mapper;
 import org.example.institutemanagement.repository.CourseRepository;
 import org.example.institutemanagement.repository.LessonRepository;
 import org.example.institutemanagement.repository.TeacherRepository;
@@ -76,10 +77,7 @@ public class CourseServiceImpl implements CourseService {
 
          List<ResponseCourseProjection> proj = courseRepository.findCourses(teacherId, termID);
 
-        return proj.stream().map(proj1 -> ResponseCourseDto.builder()
-                .courseId(proj1.getCourseId()).lessonName(proj1.getLessonName())
-                .day(proj1.getDay()).startHour(proj1.getStartHour())
-                .endHour(proj1.getEndHour()).build()).toList();
+        return Mapper.convertCourseProjectionListToResponseCourseDto(proj);
 
 
     }
