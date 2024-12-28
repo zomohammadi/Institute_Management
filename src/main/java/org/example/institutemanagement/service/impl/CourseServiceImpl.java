@@ -29,6 +29,14 @@ public class CourseServiceImpl implements CourseService {
     public void save(RegisterCourseDto dto) {
 
         courseValidator.validateCourseData(dto);
+        List<ResponseCourseDto> courses = findCourses(dto.teacherId(), dto.termId());
+
+        for (ResponseCourseDto course : courses) {
+            if (dto.day().equalsIgnoreCase(course.day()))
+                if (dto.startHour()<course.endHour() && dto.endHour()>course.startHour())
+                    throw new RuntimeException("Time conflict detected with existing courses: "+course.lessonName());
+        }
+
         Course course = CourseMapper.convertDtoToCourse(dto);
         courseRepository.save(course);
     }
