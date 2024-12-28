@@ -11,5 +11,7 @@ public interface UnitSelectionService {
 
     List<ResponseStudentDto> findStudentsWithScore(Long courseId);
 
+    void save(UnitSelection unitSelection);
+
     UnitSelection findById(Long unitSelectionId);
 }

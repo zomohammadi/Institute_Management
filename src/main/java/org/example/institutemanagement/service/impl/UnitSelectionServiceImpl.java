@@ -35,7 +35,7 @@ public class UnitSelectionServiceImpl implements UnitSelectionService {
         Course course = courseService.findById(courseId);
         Student student = studentService.findById(studentId);
 
-        if (course.getCapacity() == 0)
+        if (course.getCapacity() <= 0)
             throw new RuntimeException("Capacity is zero");
 
         if (unitSelectionRepository.isSelectCourseInThisTime(
@@ -49,6 +49,12 @@ public class UnitSelectionServiceImpl implements UnitSelectionService {
         unitSelectionRepository.save(UnitSelection.builder()
                 .student(student).course(course).build());
 
+    }
+
+    @Override
+    @Transactional
+    public void save(UnitSelection unitSelection){
+        unitSelectionRepository.save(unitSelection);
     }
 
     @Override
